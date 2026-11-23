@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="TerritorioService"
+  targetNamespace="http://territorio.soap.cl/wsdl"
+  xmlns="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:tns="http://territorio.soap.cl/wsdl"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <types>
+    <xsd:schema targetNamespace="http://territorio.soap.cl/wsdl">
+      <xsd:element name="AgregarTerritorioRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="claveVpn" type="xsd:string"/>
+            <xsd:element name="region" type="xsd:string"/>
+            <xsd:element name="provincia" type="xsd:string"/>
+            <xsd:element name="comuna" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="AgregarTerritorioResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="exito" type="xsd:boolean"/>
+            <xsd:element name="mensaje" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="ListarTerritoriosRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="claveVpn" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="ListarTerritoriosResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="territoriosJson" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:element name="EliminarTerritorioRequest">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="claveVpn" type="xsd:string"/>
+            <xsd:element name="id" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="EliminarTerritorioResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="exito" type="xsd:boolean"/>
+            <xsd:element name="mensaje" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </types>
+
+  <message name="AgregarTerritorioInput"><part name="parameters" element="tns:AgregarTerritorioRequest"/></message>
+  <message name="AgregarTerritorioOutput"><part name="parameters" element="tns:AgregarTerritorioResponse"/></message>
+  <message name="ListarTerritoriosInput"><part name="parameters" element="tns:ListarTerritoriosRequest"/></message>
+  <message name="ListarTerritoriosOutput"><part name="parameters" element="tns:ListarTerritoriosResponse"/></message>
+  <message name="EliminarTerritorioInput"><part name="parameters" element="tns:EliminarTerritorioRequest"/></message>
+  <message name="EliminarTerritorioOutput"><part name="parameters" element="tns:EliminarTerritorioResponse"/></message>
+
+  <portType name="TerritorioPortType">
+    <operation name="AgregarTerritorio"><input message="tns:AgregarTerritorioInput"/><output message="tns:AgregarTerritorioOutput"/></operation>
+    <operation name="ListarTerritorios"><input message="tns:ListarTerritoriosInput"/><output message="tns:ListarTerritoriosOutput"/></operation>
+    <operation name="EliminarTerritorio"><input message="tns:EliminarTerritorioInput"/><output message="tns:EliminarTerritorioOutput"/></operation>
+  </portType>
+
+  <binding name="TerritorioBinding" type="tns:TerritorioPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="AgregarTerritorio"><soap:operation soapAction="AgregarTerritorio"/><input><soap:body use="literal"/></input><output><soap:body use="literal"/></output></operation>
+    <operation name="ListarTerritorios"><soap:operation soapAction="ListarTerritorios"/><input><soap:body use="literal"/></input><output><soap:body use="literal"/></output></operation>
+    <operation name="EliminarTerritorio"><soap:operation soapAction="EliminarTerritorio"/><input><soap:body use="literal"/></input><output><soap:body use="literal"/></output></operation>
+  </binding>
+
+  <service name="TerritorioService">
+    <port name="TerritorioPort" binding="tns:TerritorioBinding">
+      <soap:address location="http://localhost:3001/wsdl"/>
+    </port>
+  </service>
+</definitions>
