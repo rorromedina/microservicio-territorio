@@ -28,11 +28,29 @@ const iniciar = async () => {
     console.log('🗺️ Comunas iniciales cargadas');
   }
 
-  app.listen(PORT, () => {
-    soap.listen(app, '/wsdl', serviceObject, wsdlXml, () => {
-      console.log(`🚀 Microservicio Territorio SOAP en puerto ${PORT}`);
+const server = app.listen(PORT, () => {
+      soap.listen(app, '/wsdl', serviceObject, wsdlXml, () => {
+        console.log(`Servidor SOAP corriendo en http://localhost:${PORT}/wsdl?wsdl`);
+      });
+
+      const listeners = server.listeners('request').slice(0);
+      server.removeAllListeners('request');
+      server.on('request', (req, res) => {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type, SOAPAction');
+
+        if (req.method === 'OPTIONS') {
+          res.writeHead(200);
+          res.end();
+          return;
+        }
+
+        for (const listener of listeners) {
+          listener.call(server, req, res);
+        }
+      });
     });
-  });
 };
 
 iniciar();
